@@ -30,8 +30,10 @@ class ViewController: UIViewController {
     func sendNotification() {
         var notification:UILocalNotification = UILocalNotification()
         notification.alertBody = "Pull down to interact."
-        notification.category = "ACTIONABLE"
+        notification.category = "ACTION_INTERACTIVE"
         notification.fireDate = NSDate(timeIntervalSinceNow: 10)
+        notification.soundName = UILocalNotificationDefaultSoundName
+        notification.applicationIconBadgeNumber = 1
         UIApplication.sharedApplication().scheduleLocalNotification(notification)
     }
 }

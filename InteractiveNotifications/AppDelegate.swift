@@ -17,6 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         self.registerForNotification()
+        if launchOptions != nil {
+            NSLog("LaunchOptions:%@", launchOptions!)
+        }
+        application.applicationIconBadgeNumber = 0
         return true
     }
 
@@ -42,9 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-    let NotificationCategoryIdent:String = "ACTIONABLE"
+    let NotificationCategoryIdent:String = "ACTION_INTERACTIVE"
     let NotificationActionOneIdent:String = "ACTION_ONE"
     let NotificationActionTwoIdent:String = "ACTION_TWO"
+    let NotificationActionThreeIdent:String = "ACTION_THREE"
+    let NotificationActionFourIdent:String = "ACTION_FOUR"
     
     func registerForNotification() {
         NSLog("Register Notification")
@@ -62,9 +68,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         action2.destructive = false
         action2.authenticationRequired = false
         
+        var action3:UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+        action3.activationMode = UIUserNotificationActivationMode.Background
+        action3.title = "Destructive"
+        action3.identifier = NotificationActionThreeIdent
+        action3.destructive = true
+        action3.authenticationRequired = false
+        
+        var action4:UIMutableUserNotificationAction = UIMutableUserNotificationAction()
+        action4.activationMode = UIUserNotificationActivationMode.Foreground
+        action4.title = "打开"
+        action4.identifier = NotificationActionFourIdent
+        action4.destructive = false
+        action4.authenticationRequired = false
+        
         var actionCategory:UIMutableUserNotificationCategory = UIMutableUserNotificationCategory()
         actionCategory.identifier = NotificationCategoryIdent
-        actionCategory.setActions(NSArray(objects: action1, action2), forContext: UIUserNotificationActionContext.Default)
+        actionCategory.setActions(NSArray(objects: action3, action4, action1, action2), forContext: UIUserNotificationActionContext.Default)
         
         var settings:UIUserNotificationSettings = UIUserNotificationSettings(forTypes: (UIUserNotificationType.Alert|UIUserNotificationType.Sound|UIUserNotificationType.Badge), categories: NSSet(object: actionCategory))
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
@@ -75,6 +95,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("Choose Action 1")
         } else if(identifier == NotificationActionTwoIdent) {
             NSLog("Choose Action 2")
+        } else if(identifier == NotificationActionThreeIdent) {
+            NSLog("Choose Action Destructive")
+        } else if(identifier == NotificationActionFourIdent) {
+            NSLog("Choose Action Open")
         }
 //        if (completionHandler) {
             completionHandler()
